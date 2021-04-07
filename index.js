@@ -46,6 +46,14 @@ client.connect(err => {
     })
   })
 
+  app.get('/getOrderedInfo', (req, res) => {
+    placedOrderCollection.find()
+    .toArray((err, orderData) => {
+      res.send(orderData)
+      console.log(orderData);
+    })
+  })
+
 
 
 
