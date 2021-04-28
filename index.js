@@ -10,14 +10,11 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 
-
-
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.h7tlf.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
   const allFoodsCollection = client.db(`${process.env.DB_NAME}`).collection("allFoods");
   const placedOrderCollection = client.db(`${process.env.DB_NAME}`).collection("OrderPlaced");
-
 
   app.post('/addFoods', (req, res) => {
     console.log(req.body);
@@ -33,7 +30,6 @@ client.connect(err => {
       res.send(items);
     })
   })
-
 
   app.post('/addOrder', (req, res) =>{
     console.log(req.body);
@@ -56,9 +52,8 @@ client.connect(err => {
 });
 
 
-
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.listen(5000)
+app.listen( process.env.PORT ||5000 )
