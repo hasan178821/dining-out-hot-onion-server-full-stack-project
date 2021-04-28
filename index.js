@@ -1,7 +1,7 @@
 const express = require('express');
-const cors = require('cors');
 const MongoClient = require('mongodb').MongoClient;
 require('dotenv').config();
+const cors = require("cors");
 
 
 const app = express()
@@ -15,24 +15,22 @@ app.use(express.urlencoded({extended: true}));
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.h7tlf.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
-  const breakfastCollection = client.db(`${process.env.DB_NAME}`).collection("breakfast");
+  const allFoodsCollection = client.db(`${process.env.DB_NAME}`).collection("allFoods");
   const placedOrderCollection = client.db(`${process.env.DB_NAME}`).collection("OrderPlaced");
-  
-  app.post('/addBreakfast', (req, res) => {
+
+
+  app.post('/addFoods', (req, res) => {
     console.log(req.body);
-    const breakfastCard = (req.body);
-    console.log('adding a breakfast', breakfastCard)
-    breakfastCollection.insertOne(breakfastCard)
-    .then( items => {
-      res.send(items.insertedCount > 0)
+    allFoodsCollection.insertOne(req.body)
+    .then(foods => {
+      res.send(foods.insertedCount > 0);
     })
   })
 
-  app.get('/getBreakfastInfo', (req, res) => {
-    breakfastCollection.find()
-    .toArray((err, documents) => {
-      res.send(documents)
-      console.log(documents)
+  app.get('/getFoods', (req, res) => {
+    allFoodsCollection.find()
+    .toArray((err, items) => {
+      res.send(items);
     })
   })
 
@@ -53,8 +51,6 @@ client.connect(err => {
       console.log(orderData);
     })
   })
-
-
 
 
 });
